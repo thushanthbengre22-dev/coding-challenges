@@ -20,8 +20,20 @@ The solutions are categorized by algorithmic pattern to make it easier to refere
 
 ```text
 .
-├── TwoPointers/       
-├── FastSlowPointers/ 
-├── SlidingWindow/      
-├── scripts/            # Python automation for README updates
-└── .github/            # CI/CD Workflows
+├── src
+│   ├── main
+│   │   └── java
+│   │       └── com
+│   │           └── bengre
+│   │               ├── twopointers        # Next Permutation, Sorted Squares, Remove Element
+│   │               ├── fastslowpointers   # Linked List Cycle, Intersection
+│   │               ├── slidingwindow      # Fixed-bound Subarrays, Max Sum Path
+│   └── test
+│       └── java
+│           └── com
+│               └── bengre                 # Test suites mirroring the patterns above
+├── scripts
+│   └── update_stats.py                    # Script to auto-count and update README
+├── .gitignore                             # Ignoring .idea, target, and .DS_Store
+├── pom.xml
+└── README.md
