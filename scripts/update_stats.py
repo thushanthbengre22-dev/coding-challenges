@@ -2,35 +2,57 @@ import os
 import re
 
 def update_readme_stats():
-    # 1. Define paths and folders to skip
-    base_dir = "src/main/java/com/bengre"
-    exclude_folders = ["common"] # We don't count utility classes as "solved problems"
+    # 1. Dynamic Path Resolution
+    # This finds the absolute path of the script and goes up one level to the root
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    project_root = os.path.dirname(script_dir)
 
-    # 2. Walk through the directory and count .java files
+    base_dir = os.path.join(project_root, "src/main/java/com/bengre")
+    readme_path = os.path.join(project_root, "README.md")
+
+    # Folders to skip (utilities or shared nodes)
+    exclude_folders = ["common", "util"]
+
+    # 2. Recursive Count
     problem_count = 0
+    if not os.path.exists(base_dir):
+        print(f"❌ Error: Source directory not found at {base_dir}")
+        return
+
     for root, dirs, files in os.walk(base_dir):
         # Skip excluded folders
         if any(ex in root for ex in exclude_folders):
             continue
         # Count java files
-        problem_count += len([f for f in files if f.endswith('.java')])
+        java_files = [f for f in files if f.endswith('.java')]
+        problem_count += len(java_files)
 
     # 3. Update the README.md
-    readme_path = "README.md"
     if not os.path.exists(readme_path):
-        print("README.md not found!")
+        print(f"❌ Error: README.md not found at {readme_path}")
         return
 
     with open(readme_path, "r", encoding="utf-8") as f:
         content = f.read()
 
-    # We look for the "Total Solved: X" pattern
-    new_content = re.sub(r"(Total Solved:\s*)\d+", f"\\1{problem_count}", content)
+    # Using the "Hook" method is safer.
+    # This looks for [number] # Or your existing "Total Solved: X" string.
+
+    # Pattern 1: Look for the HTML comments (Recommended)
+    hook_pattern = r"().*?()"
+
+    # Pattern 2: Your existing text-based pattern as a fallback
+    text_pattern = r"(Total Solved:\s*)\d+"
+
+    if re.search(hook_pattern, content):
+        new_content = re.sub(hook_pattern, f"\\1 {problem_count} \\2", content)
+    else:
+        new_content = re.sub(text_pattern, f"\\1{problem_count}", content)
 
     with open(readme_path, "w", encoding="utf-8") as f:
         f.write(new_content)
 
-    print(f"✅ README updated. Total problems solved: {problem_count}")
+    print(f"🚀 Success! Found {problem_count} problems. README updated at {readme_path}")
 
 if __name__ == "__main__":
     update_readme_stats()

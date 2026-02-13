@@ -5,8 +5,8 @@
 
 ---
 
-### 📊 Progress Dashboard
-**Total Problems Solved: 0**
+## 📊 Statistics
+- **Total Problems Solved:** 0- **Language:** Java 17
 ### 🛠️ Tech Stack & Tools
 * **Languages:** Java 25, Python 3.12
 * **Environments:** IntelliJ IDEA
