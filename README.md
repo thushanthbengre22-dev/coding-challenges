@@ -16,13 +16,12 @@
 
 ### 🧩 Repository Structure
 
-The solutions are categorized by data structure and algorithmic pattern to make it easier to reference during interview prep:
+The solutions are categorized by algorithmic pattern to make it easier to reference during interview prep:
 
 ```text
 .
-├── Arrays/             # Two-pointer, Sliding Window
-├── DynamicProgramming/ # Memoization, Tabulation
-├── Graphs/             # BFS, DFS, Dijkstra's
-├── LinkedLists/        # Pointer manipulation
+├── TwoPointers/       
+├── FastSlowPointers/ 
+├── SlidingWindow/      
 ├── scripts/            # Python automation for README updates
 └── .github/            # CI/CD Workflows

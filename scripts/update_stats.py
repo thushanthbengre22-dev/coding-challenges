@@ -1,60 +1,37 @@
 import os
 import re
 
-# Configuration
-IGNORE_FOLDERS = {'.git', '.github', 'scripts', 'images', '.venv'}
-EXTENSIONS = {'.java': 'Java', '.py': 'Python', '.cpp': 'C++'}
+# Configuration: Point this to your Maven source root
+SOURCE_ROOT = 'src/main/java/com/yourname'
+IGNORE_FOLDERS = {'__pycache__', '.pytest_cache'}
+EXTENSIONS = {'.java': 'Java', '.py': 'Python'}
 
 def get_problem_data():
     problems = []
-    # Walk through the directory to find solution files
-    for root, dirs, files in os.walk('.'):
-        dirs[:] = [d for d in dirs if d not in IGNORE_FOLDERS]
+    # Start walking from the source root instead of the project root
+    search_path = SOURCE_ROOT if os.path.exists(SOURCE_ROOT) else '.'
 
+    for root, dirs, files in os.walk(search_path):
         for file in files:
             ext = os.path.splitext(file)[1]
             if ext in EXTENSIONS:
-                path = os.path.join(root, file).replace('\\', '/')
-                # Category is the folder name (e.g., "Arrays")
-                category = os.path.basename(root) if root != '.' else 'General'
-                # Problem name is the filename without extension
-                name = os.path.splitext(file)[0].replace('_', ' ').title()
+                # The "Category" is the name of the subfolder (e.g., "twopointer")
+                category = os.path.basename(root).replace('_', ' ').title()
+
+                # The name is the filename (e.g., "ValidPalindrome")
+                name = os.path.splitext(file)[0].replace('_', ' ')
+                # Add spaces between CamelCase names (e.g., "Valid Palindrome")
+                name = re.sub(r'(?<!^)(?=[A-Z])', ' ', name)
+
+                # The path for the GitHub link needs to be relative to the project root
+                full_path = os.path.join(root, file).replace('\\', '/')
 
                 problems.append({
                     'name': name,
                     'category': category,
                     'language': EXTENSIONS[ext],
-                    'path': path
+                    'path': full_path
                 })
     return sorted(problems, key=lambda x: (x['category'], x['name']))
 
-def generate_markdown_table(problems):
-    header = "| Problem | Category | Language | Solution |\n"
-    separator = "| :--- | :--- | :--- | :--- |\n"
-    rows = ""
-    for p in problems:
-        rows += f"| {p['name']} | {p['category']} | {p['language']} | [View Code]({p['path']}) |\n"
-    return header + separator + rows
-
-def update_readme(count, table_md):
-    # Ensure script finds README regardless of where it's run
-    if os.path.basename(os.getcwd()) == 'scripts':
-        os.chdir('..')
-
-    with open("README.md", "r", encoding="utf-8") as f:
-        content = f.read()
-
-    # Update Statistics
-    stats_pattern = r".*?"
-    stats_replacement = f"\n**Total Problems Solved: {count}**\n"
-    content = re.sub(stats_pattern, stats_replacement, content, flags=re.DOTALL)
-
-    # Update Table
-    table_pattern = r".*?"
-    table_replacement = f"\n{table_md}\n"
-    content = re.sub(table_pattern, table_replacement, content, flags=re.DOTALL)
-
-    with open("README.md", "w", encoding="utf-8") as f:
-        f.write(content)
-
-if __name__ == "__main__":
+# ... (keep the generate_markdown_table and update_readme functions from the previous version)
