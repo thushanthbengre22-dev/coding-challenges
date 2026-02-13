@@ -1,37 +1,36 @@
 import os
 import re
 
-# Configuration: Point this to your Maven source root
-SOURCE_ROOT = 'src/main/java/com/yourname'
-IGNORE_FOLDERS = {'__pycache__', '.pytest_cache'}
-EXTENSIONS = {'.java': 'Java', '.py': 'Python'}
+def update_readme_stats():
+    # 1. Define paths and folders to skip
+    base_dir = "src/main/java/com/bengre"
+    exclude_folders = ["common"] # We don't count utility classes as "solved problems"
 
-def get_problem_data():
-    problems = []
-    # Start walking from the source root instead of the project root
-    search_path = SOURCE_ROOT if os.path.exists(SOURCE_ROOT) else '.'
+    # 2. Walk through the directory and count .java files
+    problem_count = 0
+    for root, dirs, files in os.walk(base_dir):
+        # Skip excluded folders
+        if any(ex in root for ex in exclude_folders):
+            continue
+        # Count java files
+        problem_count += len([f for f in files if f.endswith('.java')])
 
-    for root, dirs, files in os.walk(search_path):
-        for file in files:
-            ext = os.path.splitext(file)[1]
-            if ext in EXTENSIONS:
-                # The "Category" is the name of the subfolder (e.g., "twopointer")
-                category = os.path.basename(root).replace('_', ' ').title()
+    # 3. Update the README.md
+    readme_path = "README.md"
+    if not os.path.exists(readme_path):
+        print("README.md not found!")
+        return
 
-                # The name is the filename (e.g., "ValidPalindrome")
-                name = os.path.splitext(file)[0].replace('_', ' ')
-                # Add spaces between CamelCase names (e.g., "Valid Palindrome")
-                name = re.sub(r'(?<!^)(?=[A-Z])', ' ', name)
+    with open(readme_path, "r", encoding="utf-8") as f:
+        content = f.read()
 
-                # The path for the GitHub link needs to be relative to the project root
-                full_path = os.path.join(root, file).replace('\\', '/')
+    # We look for the "Total Solved: X" pattern
+    new_content = re.sub(r"(Total Solved:\s*)\d+", f"\\1{problem_count}", content)
 
-                problems.append({
-                    'name': name,
-                    'category': category,
-                    'language': EXTENSIONS[ext],
-                    'path': full_path
-                })
-    return sorted(problems, key=lambda x: (x['category'], x['name']))
+    with open(readme_path, "w", encoding="utf-8") as f:
+        f.write(new_content)
 
-# ... (keep the generate_markdown_table and update_readme functions from the previous version)
+    print(f"✅ README updated. Total problems solved: {problem_count}")
+
+if __name__ == "__main__":
+    update_readme_stats()
