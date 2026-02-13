@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.bengre.educative.io.twopointers.MinSwapsPalindromeV1Test
 -------------------------------------------------------------------------------
-Tests run: 5, Failures: 0, Errors: 0, Skipped: 5, Time elapsed: 0.001 s -- in com.bengre.educative.io.twopointers.MinSwapsPalindromeV1Test
+Tests run: 5, Failures: 0, Errors: 0, Skipped: 5, Time elapsed: 0 s -- in com.bengre.educative.io.twopointers.MinSwapsPalindromeV1Test
