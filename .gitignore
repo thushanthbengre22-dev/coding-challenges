@@ -6,7 +6,8 @@
 out/
 gen/
 
-# Compiled class file
+# Maven build output
+target/
 *.class
 
 # Log file
