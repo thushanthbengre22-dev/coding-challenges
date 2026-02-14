@@ -27,14 +27,20 @@ jobs:
     - name: Update Stats in README
       run: python3 scripts/update_stats.py
 
-    - name: Commit Updated README
+    - name: Commit and Push Updated README
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
+        
+        # 1. Stage and Commit the changes first
         git add README.md
-        # Pull the latest changes to avoid the "rejected" error
-        git pull --rebase origin master 
         git commit -m "docs: auto-update problem count" || echo "No changes to commit"
+        
+        # 2. Pull with rebase now that the working directory is clean
+        # This moves your "stats" commit to be the very latest
+        git pull --rebase origin master
+        
+        # 3. Finally, push the combined history
         git push origin master
 
     - name: Update dependency graph
