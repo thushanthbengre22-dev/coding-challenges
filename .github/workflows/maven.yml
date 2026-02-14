@@ -32,8 +32,10 @@ jobs:
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git add README.md
+        # Pull the latest changes to avoid the "rejected" error
+        git pull --rebase origin master 
         git commit -m "docs: auto-update problem count" || echo "No changes to commit"
-        git push
+        git push origin master
 
     - name: Update dependency graph
       uses: advanced-security/maven-dependency-submission-action@v4
