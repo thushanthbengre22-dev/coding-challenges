@@ -2,35 +2,38 @@ import os
 import re
 
 def update_readme_stats():
-    # 1. Setup paths relative to the script location
     script_dir = os.path.dirname(os.path.abspath(__file__))
     project_root = os.path.dirname(script_dir)
+
+    # Pathing
     base_dir = os.path.join(project_root, "src/main/java/com/bengre")
     readme_path = os.path.join(project_root, "README.md")
 
-    # 2. Count .java files, ignoring common/util
+    # 1. Count only actual Java problem files
     problem_count = 0
-    for root, dirs, files in os.walk(base_dir):
-        if any(x in root for x in ["common", "util"]):
-            continue
-        problem_count += len([f for f in files if f.endswith('.java')])
+    if os.path.exists(base_dir):
+        for root, dirs, files in os.walk(base_dir):
+            if any(x in root for x in ["common", "util", "target"]):
+                continue
+            problem_count += len([f for f in files if f.endswith('.java')])
 
-    # 3. Read the README
-    with open(readme_path, "r", encoding="utf-8") as f:
-        content = f.read()
+    # 2. Update README safely
+    if os.path.exists(readme_path):
+        with open(readme_path, "r", encoding="utf-8") as f:
+            content = f.read()
 
-    # 4. THE FIX: Only replace what is between the specific HTML comments
-    # This prevents the script from touching Java versions or complexity O(N) numbers.
-    pattern = r"().*?()"
-    replacement = f"\\1{problem_count}\\2"
+        # The '.*?' makes the regex "lazy" so it doesn't match everything in the file
+        pattern = r"().*?()"
 
-    if "" in content:
-        new_content = re.sub(pattern, replacement, content, flags=re.DOTALL)
-        with open(readme_path, "w", encoding="utf-8") as f:
-            f.write(new_content)
-        print(f"✅ Success: Updated count to {problem_count}")
-    else:
-        print("❌ Error: HTML hooks not found in README.md. No changes made.")
+        if "" in content:
+            # We use \1 and \2 to keep the markers and only change the number inside
+            new_content = re.sub(pattern, rf"\1 {problem_count} \2", content, flags=re.DOTALL)
+
+            with open(readme_path, "w", encoding="utf-8") as f:
+                f.write(new_content)
+            print(f"✅ README successfully updated to: {problem_count}")
+        else:
+            print("⚠️ Markers not found. No changes made to prevent corruption.")
 
 if __name__ == "__main__":
     update_readme_stats()
