@@ -32,15 +32,13 @@ jobs:
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         
-        # 1. Stage and Commit the changes first
         git add README.md
-        git commit -m "docs: auto-update problem count" || echo "No changes to commit"
+        # The [skip ci] below is the most important part!
+        git commit -m "docs: auto-update problem count [skip ci]" || echo "No changes to commit"
         
-        # 2. Pull with rebase now that the working directory is clean
-        # This moves your "stats" commit to be the very latest
+        # Pull with rebase to stay in sync
         git pull --rebase origin master
         
-        # 3. Finally, push the combined history
         git push origin master
 
     - name: Update dependency graph
