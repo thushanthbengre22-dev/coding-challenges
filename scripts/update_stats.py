@@ -2,13 +2,12 @@ import os
 import re
 
 def update_readme_stats():
-    # 1. Paths
     script_dir = os.path.dirname(os.path.abspath(__file__))
     project_root = os.path.dirname(script_dir)
     base_dir = os.path.join(project_root, "src/main/java/com/bengre")
     readme_path = os.path.join(project_root, "README.md")
 
-    # 2. Count Java files (ignoring common/util/target)
+    # 1. Count Java files
     problem_count = 0
     if os.path.exists(base_dir):
         for root, dirs, files in os.walk(base_dir):
@@ -16,31 +15,28 @@ def update_readme_stats():
                 continue
             problem_count += len([f for f in files if f.endswith('.java')])
 
-    # 3. Read and Update README
+    # 2. Targeted Update
     if os.path.exists(readme_path):
         with open(readme_path, "r", encoding="utf-8") as f:
             content = f.read()
 
-        # THE CRITICAL FIX: Explicitly defined markers
-        # Group 1: The Start Comment
-        # Group 2: The stuff we are replacing (the number)
-        # Group 3: The End Comment
-        start_marker = ""
-        end_marker = ""
+        # The Regex:
+        # Looks for the START comment, then the number, then the END comment.
+        # It only replaces the number in the middle.
+        start_tag = r"\[//\]: # \(STATS_START\)"
+        end_tag = r"\[//\]: # \(STATS_END\)"
+        pattern = rf"({start_tag})\s*.*?\s*({end_tag})"
 
-        pattern = rf"({re.escape(start_marker)})(.*?)({re.escape(end_marker)})"
-
-        if start_marker in content:
-            # We use \1 and \3 to keep the actual HTML comments in the file
-            # so the script can find them again next time.
-            replacement = rf"\1 {problem_count} \3"
-            new_content = re.sub(pattern, replacement, content, flags=re.DOTALL)
+        if "STATS_START" in content:
+            # \1 keeps the start tag, \2 keeps the end tag
+            replacement = rf"\1 {problem_count} \2"
+            new_content = re.sub(pattern, replacement, content)
 
             with open(readme_path, "w", encoding="utf-8") as f:
                 f.write(new_content)
-            print(f"✅ README count updated to: {problem_count}")
+            print(f"✅ Success! Updated count to {problem_count} (Markers are hidden)")
         else:
-            print(f"❌ Error: Could not find markers: {start_marker}")
+            print("❌ Error: Hidden markers not found in README.md")
 
 if __name__ == "__main__":
     update_readme_stats()
