@@ -8,7 +8,7 @@ A professional collection of algorithmic solutions categorized by **design patte
 * **Language:** Java 21 (LTS)
 * **Build Tool:** Maven
 * **Test Framework:** JUnit 5
-* **Total Problems Solved:** <!--STATS_START-->20<!--STATS_END-->
+* **Total Problems Solved:** <!--STATS_START-->30<!--STATS_END-->
 
 ### 🛠 Algorithmic Patterns
 This repository is organized by problem-solving strategies to demonstrate pattern recognition skills.
