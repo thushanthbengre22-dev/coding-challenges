@@ -1,39 +1,43 @@
-# 💻 Coding Challenges & Data Structures
+# 🚀 Java Coding Challenges
 
-> **"First, solve the problem. Then, write the code."**
-> This repository is a living documentation of my journey through algorithmic patterns, data structures, and competitive programming.
-
----
-
-## 📊 Statistics
-- **Total Problems Solved:** 0- **Language:** Java 17
-### 🛠️ Tech Stack & Tools
-* **Languages:** Java 25, Python 3.12
-* **Environments:** IntelliJ IDEA
-* **Automation:** GitHub Actions (custom scripts for statistics and table generation)
+A professional collection of algorithmic solutions categorized by **design patterns**. This repository serves as a technical portfolio for mastering complex problem-solving and clean Java implementation.
 
 ---
 
-### 🧩 Repository Structure
+### 📊 Progress Statistics
+* **Language:** Java 21 (LTS)
+* **Build Tool:** Maven
+* **Test Framework:** JUnit 5
+* **Total Problems Solved:** 20---
 
-The solutions are categorized by algorithmic pattern to make it easier to reference during interview prep:
+### 🛠 Algorithmic Patterns
+This repository is organized by problem-solving strategies to demonstrate pattern recognition skills.
 
+#### 1. Two Pointers
+*Efficient for searching pairs or manipulating sorted arrays in $O(N)$ time.*
+* [Sorted Squares](./src/main/java/com/bengre/twopointers/SortedSquares.java)
+* [Remove Element](./src/main/java/com/bengre/twopointers/RemoveElement.java)
+
+#### 2. Sliding Window
+*Optimizing sub-array or sub-string problems from $O(N^2)$ to $O(N)$.*
+* [Max Sum Subarray](./src/main/java/com/bengre/slidingwindow/MaxSumSubarray.java)
+
+#### 3. Fast & Slow Pointers
+*The "Tortoise and Hare" algorithm for cycle detection and mid-point logic.*
+* [Linked List Cycle](./src/main/java/com/bengre/fastslowpointers/LinkedListCycle.java)
+
+#### 4. Strings & Manipulation
+*Logic for parsing, compression, and pattern matching.*
+* [String Compression](./src/main/java/com/bengre/strings/StringCompression.java)
+
+---
+
+### 🏗 Project Structure
 ```text
 .
-├── src
-│   ├── main
-│   │   └── java
-│   │       └── com
-│   │           └── bengre
-│   │               ├── twopointers        # Next Permutation, Sorted Squares, Remove Element
-│   │               ├── fastslowpointers   # Linked List Cycle, Intersection
-│   │               ├── slidingwindow      # Fixed-bound Subarrays, Max Sum Path
-│   └── test
-│       └── java
-│           └── com
-│               └── bengre                 # Test suites mirroring the patterns above
-├── scripts
-│   └── update_stats.py                    # Script to auto-count and update README
-├── .gitignore                             # Ignoring .idea, target, and .DS_Store
-├── pom.xml
+├── .github/workflows/   # CI/CD: Automated builds and README updates
+├── src/main/java/       # Source code organized by pattern
+├── src/test/java/       # JUnit 5 test suites
+├── scripts/             # Python automation scripts
+├── pom.xml              # Maven configuration
 └── README.md
